@@ -1,7 +1,6 @@
 package tap
 
 import scalaz.zio.{UIO,ZIO,Ref}
-import scala.collection.mutable.Queue
 
 trait FlowControl {
   def rejects: UIO[Boolean]
