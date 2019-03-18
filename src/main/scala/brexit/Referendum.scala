@@ -34,16 +34,6 @@ class Ballot(queue: Queue[Vote], monitor: Tap[Brexit,ExitStatus]) {
 
   def close: UIO[Unit] = queue.shutdown
   
-  def process(vote: Vote): ZIO[Any,Brexit,Vote] =
-    vote match {
-      case Remain   => UIO.succeed(vote)
-      case Leave(i) =>
-        (i: @switch) match {
-          case 1 => ZIO.fail(WTOTerms)
-          case 2 => ZIO.fail(NoDeal)
-          case _ => UIO.succeed(vote)
-        }
-    }
 }
 
 object Ballot {
