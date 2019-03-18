@@ -13,7 +13,7 @@ class TapSpec extends FlatSpec with Matchers with DefaultRuntime {
   def ballot(votes: List[Vote]) =
     unsafeRun(for {
       ref <- Ref.make(MQ.fill(5)(0))
-      monitor <- Tap.make[Brexit,ExitStatus](SimpleValve(ref, 1), _ == NoDeal, Rejected)
+      monitor <- Tap.make[Brexit,ExitStatus](FraudMeter(ref, 1), _ == NoDeal, Rejected)
       io <- ZIO.foreach(votes)(vote => monitor(process(vote)).either)
     } yield io).map {
       case Right(x) => x
